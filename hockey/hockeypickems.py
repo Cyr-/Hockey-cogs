@@ -833,7 +833,7 @@ class HockeyPickems(HockeyMixin):
             top_credits = await self.pickems_config.guild(ctx.guild).top_credits()
             top_members = await self.pickems_config.guild(ctx.guild).top_amount()
         msg = _(
-            "**Pickems Settings for {guild}**\n"
+            "**Pickems Settings for TEST {guild}**\n"
             "__Channel:__ **{channel}**\n"
             "__Base {currency}:__ {base_credits}\n"
             "__Weekly {currency}:__ Top {top_members} members will earn {top_credits} {currency}\n"
