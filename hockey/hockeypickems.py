@@ -541,7 +541,7 @@ class HockeyPickems(HockeyMixin):
             else:
                 save_data[new_channel.guild.id].append(new_channel.id)
 
-        games_list = await Game.get_games(None, day, day, self.session)
+        games_list = await Game.get_games(None, day, day + timedelta(days=6), self.session)
 
         # msg_tasks = []
         for game in games_list:
@@ -634,13 +634,13 @@ class HockeyPickems(HockeyMixin):
                                 latest_date + timedelta(days=1)
                             ).timestamp()
 
-    async def create_weekly_pickems_pages(self, guilds: List[discord.Guild]) -> None:
+    async def create_monthly_pickems_pages(self, guilds: List[discord.Guild]) -> None:
         save_data = {}
         now = datetime.now(timezone.utc)
-        today = datetime(year=now.year, month=now.month, day=now.day, tzinfo=timezone.utc)
+        today = datetime(year=now.year, month=10, day=8, tzinfo=timezone.utc)
         tasks = []
         guild_data = []
-        for days in range(7):
+        for days in range(0, 28, 7):
             guild_data.append(
                 await self.create_pickems_channels_and_message(
                     guilds, today + timedelta(days=days)
@@ -833,7 +833,7 @@ class HockeyPickems(HockeyMixin):
             top_credits = await self.pickems_config.guild(ctx.guild).top_credits()
             top_members = await self.pickems_config.guild(ctx.guild).top_amount()
         msg = _(
-            "**Pickems Settings for TEST {guild}**\n"
+            "**Pickems Settings for {guild}**\n"
             "__Channel:__ **{channel}**\n"
             "__Base {currency}:__ {base_credits}\n"
             "__Weekly {currency}:__ Top {top_members} members will earn {top_credits} {currency}\n"
@@ -1043,7 +1043,7 @@ class HockeyPickems(HockeyMixin):
         channel: Optional[discord.TextChannel] = None,
     ) -> None:
         """
-        Sets up automatically created pickems threads every week.
+        Sets up automatically created pickems threads every month.
 
         `[channel]` the channel where pickems threads will be created.
         If not provided this will use the current channel.
@@ -1080,8 +1080,8 @@ class HockeyPickems(HockeyMixin):
         existing_channels = await self.pickems_config.guild(ctx.guild).pickems_channels()
         if existing_channels:
             await self.pickems_config.guild(ctx.guild).pickems_channels.clear()
-        await self.create_weekly_pickems_pages([ctx.guild])
-        msg = _("I will now automatically create pickems pages every day.")
+        await self.create_monthly_pickems_pages([ctx.guild])
+        msg = _("I will now automatically create pickems pages every month.")
         await ctx.send(msg)
 
     @pickems_commands.command(name="showcount")

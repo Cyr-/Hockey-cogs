@@ -64,7 +64,7 @@ class HockeyDev(HockeyMixin):
                 continue
             if await self.pickems_config.guild(guild).pickems_channel():
                 guilds_to_make_new_pickems.append(guild)
-        await self.create_weekly_pickems_pages(guilds_to_make_new_pickems)
+        await self.create_monthly_pickems_pages(guilds_to_make_new_pickems)
         await ctx.send("Finished resetting all pickems data.")
 
     @hockeydev.command(name="pickemsannounce", with_app_command=False)
